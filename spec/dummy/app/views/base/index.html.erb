@@ -1,0 +1,45 @@
+<h1>Tally</h1>
+<p>A basic stats collection and archive service.</p>
+<p>This is a test app to play with outside of the main app.</p>
+
+<p>Links to API views for stats:</p>
+
+<ul>
+  <li>
+    <strong>Keys: </strong>
+    <%= link_to "All", tally.keys_path %>
+    <%= link_to "Past 7 Days", tally.keys_path(start_date: 7.days.ago.strftime("%Y-%m-%d")) %>
+    <%= link_to "Past Day", tally.keys_path(start_date: 1.day.ago.strftime("%Y-%m-%d")) %>
+  </li>
+
+  <li>
+    <strong>Days: </strong>
+    <%= link_to "All", tally.days_path %>
+    <%= link_to "Past 7 Days", tally.days_path(start_date: 7.days.ago.strftime("%Y-%m-%d")) %>
+    <%= link_to "Past Day", tally.days_path(start_date: 1.day.ago.strftime("%Y-%m-%d")) %>
+  </li>
+
+  <li>
+    <strong>Records: </strong>
+    <%= link_to "All", tally.records_path %>
+    <%= link_to "Past 7 Days", tally.records_path(start_date: 7.days.ago.strftime("%Y-%m-%d")) %>
+    <%= link_to "Past Day", tally.records_path(start_date: 1.day.ago.strftime("%Y-%m-%d")) %>
+  </li>
+</ul>
+
+<hr />
+
+<h2>Test Counters</h2>
+
+<p>
+  <strong class="tester clicks">Clicks Today:</strong> <%= Tally.redis { |conn| conn.get("tally:clicks@#{ Date.today.strftime('%Y-%m-%d') }").to_i } %>
+
+  <%= link_to "Increment", new_click_path %>
+</p>
+
+
+<p>
+  <strong class="tester impressions">Impressions Today:</strong> <%= Tally.redis { |conn| conn.get("tally:impressions@#{ Date.today.strftime('%Y-%m-%d') }").to_i } %>
+
+  <%= link_to "Increment", new_impression_path %>
+</p>
