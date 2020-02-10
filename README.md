@@ -4,6 +4,10 @@ _NOTE: This gem is a work in process. Use at your own risk!_
 
 Tally is a simple Rails engine for capturing counts of various activities around an app. These counts are quickly captured in Redis then are archived periodically within the app's default relational database.
 
+Counts are captured in Redis to make them as quick as possible and not slow down your UI with unnecessary database calls.
+
+Tally can be used to capture counts of anything in your app. It is a great local and private alternative to some basic analytics tools. Tally has been used to keep track of pageviews, image impressions, newsletter clicks, new signups, and more. All of Tally's counts are archived on a daily basis, so it makes for easy reporting and trending summaries too.
+
 ## Installation
 
 This gem is a work in process, and only available via Github currently. Installed via bundler in your `Gemfile`:
@@ -16,7 +20,7 @@ gem "tally", github: "jdtornow/tally"
 
 ### Collecting counts
 
-To increment a counter, just use the `Tally.increment` method.
+The basic usage of Tally is by incrementing counters. To increment a counter, just use the `Tally.increment` method.
 
 ```ruby
 # increment the "views" counter by 1
@@ -25,6 +29,16 @@ Tally.increment(:views)
 # increment the "views" counter by 3
 Tally.increment(:views, 3)
 ```
+
+If you're inside a Rails view, you can capture counts inline too using the `increment_tally` method:
+
+```rails
+<div class="some-great-content">
+  <% increment_tally :content_views %>
+</div>
+```
+
+Typically you'd want to do this within a controller, but the view helpers are there to, um help, as needed.
 
 In addition to basic global counters, you can also attach a counter to a specific ActiveRecord model. The `Tally::Countable` mixin can be included in a specific model, or within your `ApplicationRecord` to use globally.
 
@@ -37,9 +51,13 @@ class Post < ApplicationRecord
   include Tally::Countable
 
 end
+```
 
+Then, in the controller method where a post is displayed:
+
+```ruby
 # in a controller method
-class Posts
+class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
@@ -77,9 +95,12 @@ For example, the following calculator does a count of all blog posts as of the g
 # the calculator class is registered as a string so it can be dynamically loaded as needed,
 # instead of on boot time
 Tally.register_calculator "PostsCountCalculator"
+```
 
+Then, somewhere in your app folder likely, would go this class. It doesn't need to go anywhere in particular, but if you have many of them, a folder to organize might be helpful.
 
-# in another file in your app code somewhere, maybe `app/calculators/posts_count_calculator.rb`
+```
+# app/calculators/posts_count_calculator.rb
 class PostsCountCalculator
 
   include Tally::Calculator
