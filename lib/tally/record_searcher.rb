@@ -58,11 +58,11 @@ module Tally
         end
 
         if start_date && end_date
-          scope = scope.where("day BETWEEN ? AND ?", start_date, end_date)
+          scope = scope.where(day: (start_date..end_date))
         elsif start_date
-          scope = scope.where("day >= ?", start_date)
+          scope = scope.where(day: start_date..)
         elsif end_date
-          scope = scope.where("day <= ?", end_date)
+          scope = scope.where(Record.arel_table[:day].lteq(end_date))
         end
 
         scope.order(day: :desc)
@@ -70,7 +70,7 @@ module Tally
 
       def end_date
         if params[:end_date]
-          @end_date ||= Date.parse(params[:end_date]) rescue nil
+          @end_date ||= to_date(:end_date)
         end
       end
 
@@ -90,8 +90,19 @@ module Tally
 
       def start_date
         if params[:start_date]
-          @start_date ||= Date.parse(params[:start_date]) rescue nil
+          @start_date ||= to_date(:start_date)
         end
+      end
+
+      def to_date(param_key)
+        value = params[param_key].presence
+        return nil unless value.present?
+        return value if value.is_a?(Date)
+        return value.to_date if value.respond_to?(:to_date)
+
+        Date.parse(value)
+      rescue
+        nil
       end
 
   end

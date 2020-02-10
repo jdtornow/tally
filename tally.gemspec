@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
   s.require_paths = %w( lib )
 
   s.add_dependency "rails", ">= 5.2.0", "< 7"
-  s.add_dependency "pg", "~> 1.2"
   s.add_dependency "redis", "~> 4.1"
   s.add_dependency "sidekiq", ">= 5.2", "< 7"
   s.add_dependency "kaminari-activerecord", "~> 1.1"
