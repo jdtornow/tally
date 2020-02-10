@@ -41,9 +41,10 @@ module Tally
 
       def enqueue_registered_calculators
         day_str = day.strftime("%Y-%m-%d")
+        calculate_method = Tally.config.perform_calculators == :now ? :perform_now : :perform_later
 
         Tally.calculators.each do |class_name|
-          CalculatorRunnerJob.perform_later class_name, day_str
+          CalculatorRunnerJob.public_send(calculate_method, class_name, day_str)
         end
       end
 

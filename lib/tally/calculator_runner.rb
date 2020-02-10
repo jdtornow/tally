@@ -26,7 +26,7 @@ module Tally
     def values
       return [] unless valid?
 
-      @values ||= klass.new(date).call
+      @values ||= [ klass.new(date).call ].flatten
     end
 
     def valid?
