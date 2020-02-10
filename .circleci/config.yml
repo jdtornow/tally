@@ -3,10 +3,10 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: circleci/ruby:2.4.4-node-browsers
+      - image: circleci/ruby:2.6-stretch-node
         environment:
           RAILS_ENV: test
-      - image: redis:3.2
+      - image: redis:4.0
     steps:
       - checkout
 
@@ -14,8 +14,15 @@ jobs:
       - restore_cache:
           name: Restore bundle cache
           keys:
-            - zig-tally-{{ checksum "Gemfile.lock" }}
-            - zig-tally-
+            - tally-{{ checksum "Gemfile.lock" }}
+            - tally-
+
+      - run:
+          name: Configure Bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
 
       # Bundle install dependencies
       - run:
@@ -24,7 +31,7 @@ jobs:
 
       - save_cache:
           name: Store bundle cache
-          key: zig-tally-{{ checksum "Gemfile.lock" }}
+          key: tally-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -36,6 +43,10 @@ jobs:
             bundle exec rails db:migrate
             bundle exec rails db:seed
 
+      - type: shell
+        command:
+          bundle exec rubocop
+
       # Run rspec in parallel
       - type: shell
         command: |
@@ -43,11 +54,7 @@ jobs:
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
-                            $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
-
-      - type: shell
-        command:
-          bundle exec rubocop
+                            spec/
 
       # Save artifacts
       - type: store_test_results
