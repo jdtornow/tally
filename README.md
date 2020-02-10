@@ -1,5 +1,7 @@
 # Tally
 
+_NOTE: This gem is a work in process. Use at your own risk!_
+
 Tally is a simple Rails engine for capturing counts of various activities around an app. These counts are quickly captured in Redis then are archived periodically within the app's default relational database.
 
 ## Installation
