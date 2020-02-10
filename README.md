@@ -2,6 +2,8 @@
 
 _NOTE: This gem is a work in process. Use at your own risk!_
 
+[![CircleCI](https://circleci.com/gh/jdtornow/tally.svg?style=svg)](https://circleci.com/gh/jdtornow/tally)
+
 Tally is a simple Rails engine for capturing counts of various activities around an app. These counts are quickly captured in Redis then are archived periodically within the app's default relational database.
 
 Counts are captured in Redis to make them as quick as possible and not slow down your UI with unnecessary database calls.
