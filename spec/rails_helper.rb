@@ -32,12 +32,9 @@ Time.zone = "UTC"
 ActiveJob::Base.queue_adapter = :test
 Rails.application.config.action_mailer.delivery_method = :test
 
-Sidekiq.configure_client do |config|
-  config.redis = { url: "redis://127.0.0.1:6379/1", reconnect_attempts: 1 }
-end
+REDIS = Redis.new(host: "127.0.0.1", port: "6379", db: 1)
 
-REDIS = Redis.new(host: "127.0.0.1", port: "6379")
-REDIS.select(1)
+Tally.redis_connection = REDIS
 
 class FakeCalculator
   include Tally::Calculator

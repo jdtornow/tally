@@ -4,8 +4,7 @@ PATH
     tally (0.2.4)
       kaminari-activerecord (~> 1.1)
       rails (>= 5.2.0, < 7)
-      redis (~> 4.1)
-      sidekiq (>= 5.2, < 7)
+      redis (>= 4.1)
       zeitwerk (~> 2.2)
 
 GEM
@@ -73,7 +72,6 @@ GEM
     builder (3.2.4)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
-    connection_pool (2.2.2)
     crass (1.0.6)
     diff-lcs (1.3)
     docile (1.3.2)
@@ -116,8 +114,6 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     rack (2.2.1)
-    rack-protection (2.0.8.1)
-      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.2.1)
@@ -178,11 +174,6 @@ GEM
     ruby-progressbar (1.10.1)
     shoulda-matchers (4.2.0)
       activesupport (>= 4.2.0)
-    sidekiq (6.0.4)
-      connection_pool (>= 2.2.2)
-      rack (>= 2.0.0)
-      rack-protection (>= 2.0.0)
-      redis (>= 4.1.0)
     simplecov (0.18.1)
       docile (~> 1.1)
       simplecov-html (~> 0.11.0)

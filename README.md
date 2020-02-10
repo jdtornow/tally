@@ -108,17 +108,21 @@ class PostsCountCalculator
   include Tally::Calculator
 
   def call
-    posts = Post.where("created_at <= ?", day).count
+    posts = Post.where("created_at <= ?", day.end_of_day).count
 
-    [
-      {
-        key: :posts_count,
-        value: posts
-      }
-    ]
+    {
+      key: :posts_count,
+      value: posts
+    }
   end
 
 end
+```
+
+By default, calculators are run in the background using ActiveJob. If you'd prefer to run them inline, set the `perform_calculators` config option to `:now`:
+
+```ruby
+Tally.config.perform_calculators = :now
 ```
 
 ### Displaying counts
@@ -127,6 +131,14 @@ After the archive commands are run, all counts are placed into the `Tally::Recor
 
 _TODO: Add some more details here about the endpoints available and the data format._
 
+## Redis Connection
+
+Tally works _really_ well with [Sidekiq](https://github.com/mperham/sidekiq/), but it isn't required. If Sidekiq is installed in your app, Tally will use its connection pooling for Redis connections. If Sidekiq isn't in use, the `Redis.current` connection is used to store stats. If you'd like to override the specific connection used for Tally's redis store, you can do so by setting `Tally.redis_connection` to another instance of `Redis`. This can be useful to use an alternate Redis store for just stats, for example.
+
+```ruby
+# use an alternate Redis connection (for non-sidekiq integrations)
+Tally.redis_connection = Redis.new(...)
+```
 ## Issues
 
 If you have any issues or find bugs running Tally, please [report them on Github](https://github.com/jdtornow/tally/issues).
