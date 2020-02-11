@@ -74,6 +74,12 @@ module Tally
           expect(result.size).to eq(2)
           expect(result.map(&:value)).to eq([ 5, 4 ])
         end
+
+        it "ignores invalid dates" do
+          result = RecordSearcher.search(key: "visits", end_date: "lksdlksdsld")
+
+          expect(result.size).to eq(5)
+        end
       end
 
       context "for a given related record and key" do
@@ -81,6 +87,23 @@ module Tally
           result = RecordSearcher.search(key: "clicks", record: photo2)
 
           expect(result.size).to eq(2)
+          expect(result.last.value).to eq(2)
+          expect(result.first.value).to eq(10)
+        end
+
+        it "returns the most recent records for that record by id/type" do
+          result = RecordSearcher.search(key: "clicks", id: photo2.id, type: "photo")
+
+          expect(result.size).to eq(2)
+          expect(result.last.value).to eq(2)
+        end
+      end
+
+      context "for a given type of record" do
+        it "returns the most recent records for that key" do
+          result = RecordSearcher.search(key: "clicks", type: "Photo")
+
+          expect(result.size).to eq(4)
           expect(result.last.value).to eq(2)
           expect(result.first.value).to eq(10)
         end

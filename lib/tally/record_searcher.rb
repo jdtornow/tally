@@ -98,7 +98,8 @@ module Tally
         value = params[param_key].presence
         return nil unless value.present?
         return value if value.is_a?(Date)
-        return value.to_date if value.respond_to?(:to_date)
+        return value.to_date if value.is_a?(DateTime)
+        return value.to_date if value.is_a?(Time)
 
         Date.parse(value)
       rescue
