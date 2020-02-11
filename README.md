@@ -1,7 +1,5 @@
 # Tally
 
-_NOTE: This gem is a work in process. Use at your own risk!_
-
 [![CircleCI](https://circleci.com/gh/jdtornow/tally.svg?style=svg)](https://circleci.com/gh/jdtornow/tally)
 
 Tally is a simple Rails engine for capturing counts of various activities around an app. These counts are quickly captured in Redis then are archived periodically within the app's default relational database.
@@ -10,6 +8,12 @@ Counts are captured in Redis to make them as quick as possible and not slow down
 
 Tally can be used to capture counts of anything in your app. It is a great local and private alternative to some basic analytics tools. Tally has been used to keep track of pageviews, image impressions, newsletter clicks, new signups, and more. All of Tally's counts are archived on a daily basis, so it makes for easy reporting and trending summaries too.
 
+## Requirements
+
+* Ruby 2.2+
+* Rails 5.2.x+
+* Redis 4+
+
 ## Installation
 
 This gem is a work in process, and only available via Github currently. Installed via bundler in your `Gemfile`:
@@ -17,6 +21,8 @@ This gem is a work in process, and only available via Github currently. Installe
 ```ruby
 gem "tally", github: "jdtornow/tally"
 ```
+
+Once the gem is installed, make sure to run `rails db:migrate` to add the `tally_records` table.
 
 ## Usage
 
@@ -83,6 +89,33 @@ rails tally:archive
 rails tally:archive:yesterday
 ```
 
+In addition to the rake tasks available, counts can be archived using `Tally::Archiver` with a few more options:
+
+```ruby
+# archive current day's records
+Tally::Archiver.archive(day: Date.today)
+
+# archive current days's records for a given key
+Tally::Archiver.archive(day: Date.today, key: :impressions)
+
+# archive yesterday's records for a given model
+Tally::Archiver.archive(day: 1.day.ago, record: Post.first)
+```
+
+**Please note that the archiving step is an important one** because by default the counters will expire after a few days in Redis. This is done by design, so your Redis instance doesn't fill up with endless count data.
+
+#### Count expiration
+
+By default, Redis counters are kept for 4 days. To change the default time for Redis counters to be kept, adjust the `ttl` configuration:
+
+```ruby
+# keep day counts for 30 days before they automatically expire
+Tally.config.ttl = 30.days
+
+# don't expire counts (warning: this may fill up a small redis instance over time)
+Tally.config.ttl = nil
+```
+
 ### Custom archive calculators
 
 In addition to the default archive behavior, Tally can run additional archive classes each time the archive commands above are run. This is useful to perform aggregate calculations or pull stats from other sources to archive.
@@ -129,7 +162,41 @@ Tally.config.perform_calculators = :now
 
 After the archive commands are run, all counts are placed into the `Tally::Record` model. This is a standard ActiveRecord model that can be used as you see fit.
 
-_TODO: Add some more details here about the endpoints available and the data format._
+There are few built-in ways to explore the archived counts in your database. First, the `Tally::RecordSearcher` is a handy tool for finding counts. It just uses ActiveRecord query syntax to build a scope on top of `Tally::Record`.
+
+```ruby
+# find all visit records in a given date range
+records = Tally::RecordSearcher.search(key: "views", start_date: "2020-01-01", end_date: "2020-01-31")
+
+# find all views for a given post by day
+post = Post.first
+records = Tally::RecordSearcher.search(key: "views", record: post)
+views_by_day = Tally::RecordSearcher.search(key: "views", record: post).group(:day).sum(:value)
+
+# get total views for all posts
+Tally::RecordSearcher.search(key: "views", type: "Post").sum(:value)
+```
+
+To display counts in a web service, `Tally::Engine` can be mounted to add a few endpoints. Please note that this endpoints are not protected with authentication, so you will want to handle accordingly in your routes with a constraint or something.
+
+```ruby
+# in config/routes.rb
+
+mount Tally::Engine, at: "/tally"
+```
+
+This adds the following routes to your app:
+
+```text
+   recordable_days GET  /days/:type/:id(.:format)    tally/days#index
+              days GET  /days(.:format)              tally/days#index
+   recordable_keys GET  /keys/:type/:id(.:format)    tally/keys#index
+              keys GET  /keys(.:format)              tally/keys#index
+recordable_records GET  /records/:type/:id(.:format) tally/records#index
+           records GET  /records(.:format)           tally/records#index
+```
+
+The endpoints can be used to display JSON-formatted data from `Tally::Record`. These endpoints are useful for turning stats into charts or other formatted data in your front-end. The endpoints are entirely optional, and aren't included by default.
 
 ## Redis Connection
 
