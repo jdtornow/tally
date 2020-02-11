@@ -60,7 +60,7 @@ module Tally
         if start_date && end_date
           scope = scope.where(day: (start_date..end_date))
         elsif start_date
-          scope = scope.where(day: start_date..)
+          scope = scope.where(day: start_date..Float::INFINITY)
         elsif end_date
           scope = scope.where(Record.arel_table[:day].lteq(end_date))
         end
