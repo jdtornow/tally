@@ -15,6 +15,14 @@ Gem::Specification.new do |s|
   s.files         = Dir.glob("{app,bin,config,db,lib}/**/*") + %w( README.md Rakefile )
   s.require_paths = %w( lib )
 
+  s.metadata = {
+    "bug_tracker_uri"   => "https://github.com/jdtornow/tally/issues",
+    "changelog_uri"     => "https://github.com/jdtornow/tally/releases",
+    "homepage_uri"      => "https://github.com/jdtornow/tally",
+    "source_code_uri"   => "https://github.com/jdtornow/tally",
+    "wiki_uri"          => "https://github.com/jdtornow/tally/wiki"
+  }
+
   s.required_ruby_version     = ">= 2.5.7"
   s.required_rubygems_version = ">= 1.8.11"
 
