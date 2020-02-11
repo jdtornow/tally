@@ -13,6 +13,13 @@ RSpec.describe "Helpers", type: :request do
         REDIS.get("tally:views@2018-09-01").to_i
       }.by(1)
     end
+
+    it "doesn't kill the page if there's a recording error" do
+      expect(Tally::Increment).to receive(:increment).and_raise(Redis::CommandError)
+
+      get "/test/increment"
+      expect(response.status).to eq(200)
+    end
   end
 
 end
