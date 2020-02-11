@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.files         = Dir.glob("{app,bin,config,db,lib}/**/*") + %w( README.md Rakefile )
   s.require_paths = %w( lib )
 
-  s.required_ruby_version     = ">= 2.2.2"
+  s.required_ruby_version     = ">= 2.5.7"
   s.required_rubygems_version = ">= 1.8.11"
 
   s.add_dependency "rails", ">= 5.2.4.1", "< 7"
