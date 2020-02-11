@@ -68,6 +68,10 @@ GEM
     annotate (3.0.3)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
+    appraisal (2.2.0)
+      bundler
+      rake
+      thor (>= 0.14.0)
     ast (2.4.0)
     builder (3.2.4)
     coderay (1.1.2)
@@ -202,6 +206,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
+  appraisal
   factory_bot_rails (~> 5.1)
   pry-rails
   rspec-rails (~> 3.7)
@@ -214,4 +219,4 @@ DEPENDENCIES
   timecop (~> 0.9)
 
 BUNDLED WITH
-   2.1.4
+   2.1.2

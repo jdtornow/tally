@@ -8,24 +8,19 @@ commands:
 
       - restore_cache:
           name: Restore bundle cache
-          key: tally-{{ checksum "Gemfile.lock" }}
-
-      - run:
-          name: Configure Bundler
-          command: |
-            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-            source $BASH_ENV
-            gem install bundler
+          key: v3-tally-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: Bundle Install
           command: |
-            ./bin/bundle config set path 'vendor/bundle'
-            ./bin/bundle check || ./bin/bundle install --jobs 4 --retry 3
+            gem uninstall bundler
+            gem install bundler -v=2.1.2
+            bundle config set path 'vendor/bundle'
+            bundle install
 
       - save_cache:
           name: Store bundle cache
-          key: tally-{{ checksum "Gemfile.lock" }}
+          key: v3-tally-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -42,8 +37,6 @@ default_job: &default_job
     - run:
         name: "Rubocop"
         command: bundle exec rubocop
-
-
 
     - run:
         name: "RSpec"
