@@ -1,21 +1,14 @@
-version: 2
-jobs:
-  build:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/ruby:2.6-stretch-node
-        environment:
-          RAILS_ENV: test
-      - image: redis:4.0
+---
+version: 2.1
+
+commands:
+  shared_steps:
     steps:
       - checkout
 
-      # Restore bundle cache
       - restore_cache:
           name: Restore bundle cache
-          keys:
-            - tally-{{ checksum "Gemfile.lock" }}
-            - tally-
+          key: tally-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: Configure Bundler
@@ -24,10 +17,11 @@ jobs:
             source $BASH_ENV
             gem install bundler
 
-      # Bundle install dependencies
       - run:
           name: Bundle Install
-          command: bin/bundle check --path vendor/bundle ||  bin/bundle install --path vendor/bundle --jobs 4 --retry 3
+          command: |
+            ./bin/bundle config set path 'vendor/bundle'
+            ./bin/bundle check || ./bin/bundle install --jobs 4 --retry 3
 
       - save_cache:
           name: Store bundle cache
@@ -35,27 +29,56 @@ jobs:
           paths:
             - vendor/bundle
 
-      - run:
-          name: Migrate
-          environment:
-            - RAILS_ENV: test
-          command: |
-            bundle exec rails db:migrate
-            bundle exec rails db:seed
+default_job: &default_job
+  working_directory: ~/repo
+  steps:
+    - shared_steps
 
-      - type: shell
-        command:
-          bundle exec rubocop
+    - run:
+        name: "Rails DB Migrate"
+        command: |
+          bundle exec rails db:migrate
 
-      # Run rspec in parallel
-      - type: shell
+    - run:
+        name: "Rubocop"
+        command: bundle exec rubocop
+
+
+
+    - run:
+        name: "RSpec"
         command: |
           bundle exec rspec --profile 10 \
-                            --format RspecJunitFormatter \
-                            --out /tmp/test-results/rspec.xml \
-                            --format progress \
-                            spec/
+                          --format RspecJunitFormatter \
+                          --out /tmp/test-results/rspec.xml \
+                          --format progress \
+                          spec/
 
-      # Save artifacts
-      - type: store_test_results
+    - store_test_results:
         path: /tmp/test-results
+
+jobs:
+  ruby_25:
+    <<: *default_job
+    docker:
+      - image: circleci/ruby:2.5-stretch-node
+        environment:
+          RAILS_ENV: test
+      - image: redis:4.0
+
+  ruby_26:
+    <<: *default_job
+    docker:
+      - image: circleci/ruby:2.6-stretch-node
+        environment:
+          RAILS_ENV: test
+      - image: redis:4.0
+
+
+workflows:
+  version: 2
+  rubies:
+    jobs:
+      - ruby_25
+      - ruby_26
+
