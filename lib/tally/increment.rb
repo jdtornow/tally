@@ -7,10 +7,10 @@ module Tally
       Tally.redis do |conn|
         conn.multi do
           conn.incrby(redis_key, by)
-          conn.expire(redis_key, Tally.config.ttl)
+          conn.expire(redis_key, Tally.config.ttl) if Tally.config.ttl.present?
 
           conn.sadd(daily_key, simple_key)
-          conn.expire(daily_key, Tally.config.ttl)
+          conn.expire(daily_key, Tally.config.ttl) if Tally.config.ttl.present?
         end
       end
     end
