@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tally (0.2.4)
+    tally (1.0.0.beta1)
       kaminari-activerecord (~> 1.1)
       rails (>= 5.2.4.1, < 7)
       redis (>= 4.1)
