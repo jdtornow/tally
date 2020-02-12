@@ -1,15 +1,4 @@
 lib/**/*.rb
-
---charset          utf-8
---readme           README.md
---markup           markdown
---markup-provider  redcarpet
---default-return   ""
---title            "Tally"
---hide-void-return
---protected
---no-private
---no-highlight
 -
 CHANGELOG.md
 MIT-LICENSE
