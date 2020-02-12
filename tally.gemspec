@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description   = "Tally is a simple Rails engine for capturing counts of various activities around an app. These counts are quickly captured in Redis then are archived periodically within the app’s default relational database."
   s.homepage      = "https://github.com/jdtornow/tally"
   s.license       = "MIT"
-  s.files         = Dir.glob("{app,bin,config,db,lib}/**/*") + %w( README.md Rakefile )
+  s.files         = Dir.glob("{app,config,db,lib}/**/*") + %w( README.md Rakefile )
   s.require_paths = %w( lib )
 
   s.metadata = {
