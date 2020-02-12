@@ -3,7 +3,6 @@
 require "tally/engine"
 require "tally/version"
 require "active_support/dependencies/autoload"
-require "kaminari/activerecord"
 
 require "redis"
 

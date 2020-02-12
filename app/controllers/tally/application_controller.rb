@@ -1,3 +1,5 @@
+require "kaminari/activerecord"
+
 module Tally
   class ApplicationController < ActionController::Base
 
