@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-# Declare your gem's dependencies in tally.gemspec.
+# Declare your gem"s dependencies in tally.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
 gemspec
@@ -18,4 +18,9 @@ group :development, :test do
   gem "sqlite3"
   gem "annotate"
   gem "rubocop"
+end
+
+group :docs do
+  gem "yard"
+  gem "redcarpet"
 end

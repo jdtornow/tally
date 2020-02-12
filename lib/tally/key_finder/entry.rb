@@ -1,4 +1,5 @@
 module Tally
+  # @!visibility private
   class KeyFinder::Entry
 
     attr_reader :raw_key

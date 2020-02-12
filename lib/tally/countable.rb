@@ -1,6 +1,8 @@
 require "active_support/concern"
 
 module Tally
+  # An ActiveSupport::Concern mixin for Rails models that want to increment counters
+  # for a specific model record.
   module Countable
 
     extend ActiveSupport::Concern
