@@ -16,10 +16,10 @@ Tally can be used to capture counts of anything in your app. It is a great local
 
 ## Installation
 
-This gem is a work in process, and only available via Github currently. Installed via bundler in your `Gemfile`:
+Installed with bundler in your `Gemfile`:
 
 ```ruby
-gem "tally", github: "jdtornow/tally"
+gem "tally"
 ```
 
 Once the gem is installed, make sure to run `rails db:migrate` to add the `tally_records` table.
@@ -40,7 +40,7 @@ Tally.increment(:views, 3)
 
 If you're inside a Rails view, you can capture counts inline too using the `increment_tally` method:
 
-```rails
+```erb
 <div class="some-great-content">
   <% increment_tally :content_views %>
 </div>
