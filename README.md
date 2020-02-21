@@ -8,6 +8,8 @@ Counts are captured in Redis to make them as quick as possible and not slow down
 
 Tally can be used to capture counts of anything in your app. It is a great local and private alternative to some basic analytics tools. Tally has been used to keep track of pageviews, image impressions, newsletter clicks, new signups, and more. All of Tally's counts are archived on a daily basis, so it makes for easy reporting and trending summaries too.
 
+_[Read more about Tally in my blog post introducing it ...](https://johntornow.com/tech/2020/02/tally)_
+
 ## Requirements
 
 * Ruby 2.2+
