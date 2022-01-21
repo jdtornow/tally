@@ -29,8 +29,8 @@ module Tally
       @records ||= build_search_scope
     end
 
-    def self.search(*args)
-      new(*args).records
+    def self.search(params = {})
+      new(params).records
     end
 
     private

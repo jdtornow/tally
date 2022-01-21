@@ -32,8 +32,8 @@ module Tally
       end
     end
 
-    def self.sweep!(*args)
-      new(*args).sweep!
+    def self.sweep!(**args)
+      new(**args).sweep!
     end
 
     private

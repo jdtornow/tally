@@ -61,8 +61,8 @@ module Tally
       entries.map(&:type).compact.uniq
     end
 
-    def self.find(*args)
-      new(*args).entries
+    def self.find(**args)
+      new(**args).entries
     end
 
     private

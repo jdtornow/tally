@@ -33,8 +33,8 @@ module Tally
       @day ||= Time.current.utc.to_date
     end
 
-    def self.archive!(*args)
-      new(*args).archive!
+    def self.archive!(**args)
+      new(**args).archive!
     end
 
     private
