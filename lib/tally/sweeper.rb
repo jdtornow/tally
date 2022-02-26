@@ -23,9 +23,9 @@ module Tally
     def sweep!
       Tally.redis do |conn|
         purgeable_keys.in_groups_of(25, fill_with = nil).each do |group|
-          conn.pipelined do
+          conn.pipelined do |pipeline|
             group.each do |key|
-              conn.del(key)
+              pipeline.del(key)
             end
           end
         end

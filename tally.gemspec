@@ -26,14 +26,14 @@ Gem::Specification.new do |s|
   s.required_ruby_version     = ">= 2.5.7"
   s.required_rubygems_version = ">= 1.8.11"
 
-  s.add_dependency "rails", ">= 5.2.0", "< 7"
+  s.add_dependency "rails", ">= 5.2.0", "< 8"
   s.add_dependency "redis", ">= 4.1"
   s.add_dependency "kaminari-activerecord", "~> 1.1"
   s.add_dependency "zeitwerk", "~> 2.2"
 
-  s.add_development_dependency "rspec-rails", "~> 4.0"
+  s.add_development_dependency "rspec-rails", "~> 5.1"
   s.add_development_dependency "factory_bot_rails", "~> 6.1"
-  s.add_development_dependency "shoulda-matchers", "~> 4.2"
+  s.add_development_dependency "shoulda-matchers", "~> 5.1"
   s.add_development_dependency "simplecov", "~> 0.11"
   s.add_development_dependency "rspec_junit_formatter", "~> 0.2"
   s.add_development_dependency "timecop", "~> 0.9"
