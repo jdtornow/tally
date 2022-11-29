@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency "kaminari-activerecord", "~> 1.1"
   s.add_dependency "zeitwerk", "~> 2.2"
 
-  s.add_development_dependency "rspec-rails", "~> 5.1"
+  s.add_development_dependency "rspec-rails", "~> 6"
   s.add_development_dependency "factory_bot_rails", "~> 6.1"
   s.add_development_dependency "shoulda-matchers", "~> 5.1"
   s.add_development_dependency "simplecov", "~> 0.11"
