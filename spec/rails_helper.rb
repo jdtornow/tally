@@ -18,6 +18,11 @@ require "timecop"
 
 require "factories"
 
+if defined?(Sidekiq)
+  require "sidekiq/testing"
+  Sidekiq.logger.level = Logger::ERROR
+end
+
 Dir[File.expand_path("./spec/support/**/*.rb")].each { |f| require f }
 
 Shoulda::Matchers.configure do |config|
