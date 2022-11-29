@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
     "wiki_uri"          => "https://github.com/jdtornow/tally/wiki"
   }
 
-  s.required_ruby_version     = ">= 2.5.7"
+  s.required_ruby_version     = ">= 3.0.5"
   s.required_rubygems_version = ">= 1.8.11"
 
   s.add_dependency "rails", ">= 5.2.0", "< 8"
