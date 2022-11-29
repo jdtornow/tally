@@ -73,18 +73,16 @@ module Tally
 
       def build_keys_from_redis
         result = []
-        cursor = ""
-
-        scan = scan_from_redis
+        cursor = nil
 
         while cursor != "0"
+          scan = scan_from_redis(cursor: cursor.presence || "0")
+
           result << scan.last
           cursor = scan.first
-
-          scan = scan_from_redis(cursor: cursor)
         end
 
-        result.flatten
+        result.flatten.uniq
       end
 
       def day_key
@@ -100,7 +98,19 @@ module Tally
       end
 
       def scan_from_redis(cursor: "0")
-        Tally.redis { |conn| conn.scan(cursor, match: scan_key) }
+        klass = Tally.redis { |conn| conn.class.to_s }
+
+        # if we're using sidekiq / RedisClient, scan needs a block, and doesn't worry about the cursor
+        if klass == "Sidekiq::RedisClientAdapter::CompatClient"
+          Tally.redis do |conn|
+            [
+              "0", # fake cursor to match redis-rb output
+              conn.scan("MATCH", scan_key).to_a
+            ]
+          end
+        else
+          Tally.redis { |conn| conn.scan(cursor, match: scan_key) }
+        end
       end
 
       def scan_key
