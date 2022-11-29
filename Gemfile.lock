@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/simplecov-ruby/simplecov.git
+  revision: 0f1c69af8b96816d0328888382660eef0522d04f
+  ref: 0f1c69af8
+  specs:
+    simplecov (0.21.2)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+
 PATH
   remote: .
   specs:
@@ -208,10 +218,6 @@ GEM
     ruby-progressbar (1.11.0)
     shoulda-matchers (5.2.0)
       activesupport (>= 5.2.0)
-    simplecov (0.21.2)
-      docile (~> 1.1)
-      simplecov-html (~> 0.11)
-      simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     sqlite3 (1.5.4)
@@ -242,11 +248,11 @@ DEPENDENCIES
   rspec_junit_formatter (~> 0.2)
   rubocop
   shoulda-matchers (~> 5.1)
-  simplecov (~> 0.11)
+  simplecov!
   sqlite3
   tally!
   timecop (~> 0.9)
   yard
 
 BUNDLED WITH
-   2.2.32
+   2.3.26

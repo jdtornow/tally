@@ -18,6 +18,10 @@ group :development, :test do
   gem "sqlite3"
   gem "annotate"
   gem "rubocop"
+
+  # specific commit until this PR is released to allow RUby 3.1
+  # https://github.com/simplecov-ruby/simplecov/pull/1035
+  gem "simplecov", require: false, github: "simplecov-ruby/simplecov", ref: "0f1c69af8"
 end
 
 group :docs do

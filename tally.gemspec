@@ -35,7 +35,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails", "~> 6"
   s.add_development_dependency "factory_bot_rails", "~> 6.1"
   s.add_development_dependency "shoulda-matchers", "~> 5.1"
-  s.add_development_dependency "simplecov", "~> 0.11"
   s.add_development_dependency "rspec_junit_formatter", "~> 0.2"
   s.add_development_dependency "timecop", "~> 0.9"
   s.add_development_dependency "appraisal"
