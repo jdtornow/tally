@@ -11,7 +11,7 @@ GIT
 PATH
   remote: .
   specs:
-    tally (1.0.2)
+    tally (2.0.0)
       connection_pool (>= 2.0)
       kaminari-activerecord (~> 1.1)
       rails (>= 5.2.0, < 8)
@@ -218,10 +218,6 @@ GEM
     ruby-progressbar (1.11.0)
     shoulda-matchers (5.2.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.5.5)
-      connection_pool (>= 2.2.2)
-      rack (~> 2.0)
-      redis (>= 4.5.0)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     sqlite3 (1.5.4)
@@ -252,7 +248,6 @@ DEPENDENCIES
   rspec_junit_formatter (~> 0.2)
   rubocop
   shoulda-matchers (~> 5.1)
-  sidekiq (< 7)
   simplecov!
   sqlite3
   tally!
