@@ -41,11 +41,7 @@ default_job: &default_job
     - run:
         name: "RSpec"
         command: |
-          bundle exec rspec --profile 10 \
-                          --format RspecJunitFormatter \
-                          --out /tmp/test-results/rspec.xml \
-                          --format progress \
-                          spec/
+          bundle exec appraisal rspec --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
 
     - store_test_results:
         path: /tmp/test-results
