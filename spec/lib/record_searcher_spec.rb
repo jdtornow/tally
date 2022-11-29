@@ -152,7 +152,7 @@ module Tally
       it "calls to new().search" do
         mock = double("Tally::RecordSearcher")
 
-        expect(RecordSearcher).to receive(:new).with(key: "visits").once.and_return(mock)
+        expect(RecordSearcher).to receive(:new).with({ key: "visits" }).once.and_return(mock)
         expect(mock).to receive(:records).once
 
         RecordSearcher.search(key: "visits")
