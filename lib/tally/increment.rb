@@ -7,10 +7,10 @@ module Tally
       Tally.redis do |conn|
         conn.multi do |pipeline|
           pipeline.incrby(redis_key, by)
-          pipeline.expire(redis_key, Tally.config.ttl) if Tally.config.ttl.present?
+          pipeline.expire(redis_key, Tally.config.ttl.to_i) if Tally.config.ttl.present?
 
           pipeline.sadd(daily_key, simple_key)
-          pipeline.expire(daily_key, Tally.config.ttl) if Tally.config.ttl.present?
+          pipeline.expire(daily_key, Tally.config.ttl.to_i) if Tally.config.ttl.present?
         end
       end
     end
