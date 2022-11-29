@@ -8,7 +8,7 @@ commands:
 
       - restore_cache:
           name: Restore bundle cache
-          key: v3-tally-{{ checksum "Gemfile.lock" }}
+          key: v4-tally-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: Bundle Install
@@ -17,10 +17,11 @@ commands:
             gem install bundler -v=2.1.2
             bundle config set path 'vendor/bundle'
             bundle install
+            bundle exec appraisal install
 
       - save_cache:
           name: Store bundle cache
-          key: v3-tally-{{ checksum "Gemfile.lock" }}
+          key: v4-tally-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
