@@ -20,15 +20,14 @@ module Tally
 
       it "adds the photo to the list of stats for today" do
         is_member = Tally.redis { |conn| conn.sismember("tally@2018-09-01", "photo:#{ photo.id }:views") }
-        is_member = is_member.to_i == 1 || is_member == true
+        is_member = is_member == false ? false : is_member.to_i == 1 || is_member == true
 
         expect(is_member).to eq(false)
-
 
         photo.increment_tally(:views)
 
         is_now_member = Tally.redis { |conn| conn.sismember("tally@2018-09-01", "photo:#{ photo.id }:views") }
-        is_now_member = is_now_member.to_i == 1 || is_now_member == true
+        is_now_member = is_now_member == true || is_now_member.to_i == 1
 
         expect(is_now_member).to eq(true)
       end

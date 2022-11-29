@@ -28,7 +28,7 @@ RSpec.describe Tally do
       redis_connection = instance_double("Redis")
       expect(redis_connection).to receive(:get).with("fake").and_return("ok")
 
-      expect(Redis).to receive(:new).with({}).and_return(redis_connection)
+      expect(Redis).to receive(:new).with({:db=>1, :host=>"127.0.0.1", :port=>"6379"}).and_return(redis_connection)
 
       result = Tally.redis { |conn| conn.get("fake") }
 
