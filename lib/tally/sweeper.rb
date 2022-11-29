@@ -22,7 +22,7 @@ module Tally
 
     def sweep!
       Tally.redis do |conn|
-        purgeable_keys.in_groups_of(25, fill_with = nil).each do |group|
+        purgeable_keys.in_groups_of(25, fill_with = false).each do |group|
           conn.pipelined do |pipeline|
             group.each do |key|
               pipeline.del(key)
