@@ -12,8 +12,8 @@ _[Read more about Tally in my blog post introducing it ...](https://johntornow.c
 
 ## Requirements
 
-* Ruby 2.2+
-* Rails 5.2.x+
+* Ruby 3.0.3+
+* Rails 6.1+
 * Redis 4+
 
 ## Installation
@@ -204,10 +204,31 @@ The endpoints can be used to display JSON-formatted data from `Tally::Record`. T
 
 Tally works _really_ well with [Sidekiq](https://github.com/mperham/sidekiq/), but it isn't required. If Sidekiq is installed in your app, Tally will use its connection pooling for Redis connections. If Sidekiq isn't in use, the `Redis.current` connection is used to store stats. If you'd like to override the specific connection used for Tally's redis store, you can do so by setting `Tally.redis_connection` to another instance of `Redis`. This can be useful to use an alternate Redis store for just stats, for example.
 
+As of version 2.0.0 this connection is automatically used within a [ConnectionPool](https://github.com/mperham/connection_pool).
+
 ```ruby
 # use an alternate Redis connection (for non-sidekiq integrations)
 Tally.redis_connection = Redis.new(...)
 ```
+
+Alternatively, you can just set the config for Redis and `Redis.new` will be called for you:
+
+```ruby
+# provide Redis config
+Tally.config.redis_config = {
+  driver: :ruby,
+  url: "redis://127.0.0.1:6379/10",
+  ssl_params: {
+    verify_mode: OpenSSL::SSL::VERIFY_NONE
+  }
+}
+
+# then Tally uses the connection within a pool:
+Tally.redis do |connection|
+  connection.incr("test")
+end
+```
+
 ## Issues
 
 If you have any issues or find bugs running Tally, please [report them on Github](https://github.com/jdtornow/tally/issues).
