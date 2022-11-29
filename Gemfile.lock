@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     tally (1.0.2)
+      connection_pool (>= 2.0)
       kaminari-activerecord (~> 1.1)
       rails (>= 5.2.0, < 8)
       redis (>= 4.1)

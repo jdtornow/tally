@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 5.2.0", "< 8"
   s.add_dependency "redis", ">= 4.1"
+  s.add_dependency "connection_pool", ">= 2.0"
   s.add_dependency "kaminari-activerecord", "~> 1.1"
   s.add_dependency "zeitwerk", "~> 2.2"
 
