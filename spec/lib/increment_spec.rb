@@ -18,41 +18,41 @@ module Tally
 
     describe "#increment" do
       it "increments a key value by 1 for today" do
-        expect(REDIS.get("tally:views@2018-09-01").to_i).to eq(0)
+        expect(Tally.redis { |conn| conn.get("tally:views@2018-09-01").to_i }).to eq(0)
 
         subject.increment
 
-        expect(REDIS.get("tally:views@2018-09-01").to_i).to eq(1)
+        expect(Tally.redis { |conn| conn.get("tally:views@2018-09-01").to_i }).to eq(1)
       end
 
       it "adds the day to the set of keys" do
-        expect(REDIS.smembers("tally@2018-09-01")).to eq([])
+        expect(Tally.redis { |conn| conn.smembers("tally@2018-09-01") }).to eq([])
 
         subject.increment
 
-        expect(REDIS.smembers("tally@2018-09-01")).to eq([ "views" ])
+        expect(Tally.redis { |conn| conn.smembers("tally@2018-09-01") }).to eq([ "views" ])
       end
 
       it "increments a key value by X for today" do
-        expect(REDIS.get("tally:views@2018-09-01").to_i).to eq(0)
+        expect(Tally.redis { |conn| conn.get("tally:views@2018-09-01").to_i }).to eq(0)
 
         subject.increment(5)
 
-        expect(REDIS.get("tally:views@2018-09-01").to_i).to eq(5)
+        expect(Tally.redis { |conn| conn.get("tally:views@2018-09-01").to_i }).to eq(5)
 
         subject.increment
 
-        expect(REDIS.get("tally:views@2018-09-01").to_i).to eq(6)
+        expect(Tally.redis { |conn| conn.get("tally:views@2018-09-01").to_i }).to eq(6)
       end
 
       it "sets the standard ttl on the new key" do
         subject.increment
 
-        expect(REDIS.smembers("tally@2018-09-01")).to eq([ "views" ])
+        expect(Tally.redis { |conn| conn.smembers("tally@2018-09-01") }).to eq([ "views" ])
 
         sleep 1
 
-        ttl = REDIS.ttl("tally@2018-09-01")
+        ttl = Tally.redis { |conn| conn.ttl("tally@2018-09-01") }
 
         expect(ttl).to_not be_nil
         expect(ttl).to be > 0
@@ -62,11 +62,11 @@ module Tally
       it "sets the standard ttl on the day's set" do
         subject.increment
 
-        expect(REDIS.get("tally:views@2018-09-01").to_i).to eq(1)
+        expect(Tally.redis { |conn| conn.get("tally:views@2018-09-01").to_i }).to eq(1)
 
         sleep 1
 
-        ttl = REDIS.ttl("tally:views@2018-09-01")
+        ttl = Tally.redis { |conn| conn.ttl("tally:views@2018-09-01") }
 
         expect(ttl).to_not be_nil
         expect(ttl).to be > 0
@@ -77,31 +77,31 @@ module Tally
         subject { Increment.new(key, photo) }
 
         it "increments a key value by 1 for today" do
-          expect(REDIS.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i).to eq(0)
+          expect(Tally.redis { |conn| conn.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i }).to eq(0)
 
           subject.increment
 
-          expect(REDIS.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i).to eq(1)
+          expect(Tally.redis { |conn| conn.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i }).to eq(1)
         end
 
         it "adds the day to the set of keys" do
-          expect(REDIS.smembers("tally@2018-09-01")).to eq([])
+          expect(Tally.redis { |conn| conn.smembers("tally@2018-09-01") }).to eq([])
 
           subject.increment
 
-          expect(REDIS.smembers("tally@2018-09-01")).to eq([ "photo:#{ photo.id }:views" ])
+          expect(Tally.redis { |conn| conn.smembers("tally@2018-09-01") }).to eq([ "photo:#{ photo.id }:views" ])
         end
 
         it "increments a key value by X for today" do
-          expect(REDIS.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i).to eq(0)
+          expect(Tally.redis { |conn| conn.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i }).to eq(0)
 
           subject.increment(5)
 
-          expect(REDIS.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i).to eq(5)
+          expect(Tally.redis { |conn| conn.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i }).to eq(5)
 
           subject.increment
 
-          expect(REDIS.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i).to eq(6)
+          expect(Tally.redis { |conn| conn.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i }).to eq(6)
         end
       end
     end
@@ -112,7 +112,7 @@ module Tally
           Increment.increment(:clicks)
           Increment.increment(:clicks, nil, 2)
         }.to change {
-          REDIS.get("tally:clicks@2018-09-01").to_i
+          Tally.redis { |conn| conn.get("tally:clicks@2018-09-01").to_i }
         }.by(3)
       end
 
@@ -121,7 +121,7 @@ module Tally
           Increment.increment("publisher.visits", photo)
           Increment.increment("publisher.visits", photo, 2)
         }.to change {
-          REDIS.get("tally:photo:#{ photo.id }:publisher.visits@2018-09-01").to_i
+          Tally.redis { |conn| conn.get("tally:photo:#{ photo.id }:publisher.visits@2018-09-01").to_i }
         }.by(3)
       end
     end

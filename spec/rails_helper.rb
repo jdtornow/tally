@@ -31,10 +31,6 @@ Time.zone = "UTC"
 
 ActiveJob::Base.queue_adapter = :test
 
-REDIS = Redis.new(host: "127.0.0.1", port: "6379", db: 1)
-
-Tally.redis_connection = REDIS
-
 class FakeCalculator
   include Tally::Calculator
 end
@@ -93,8 +89,15 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.before(:each) do
-    Tally.redis_connection = REDIS
-    REDIS.flushdb
+    Tally.config.redis_config = {
+      host: "127.0.0.1",
+      port: "6379",
+      db: 1
+    }
+
+    Tally.redis_connection = nil
+    Tally.redis_pool = nil
+    Tally.redis { |conn| conn.flushdb }
   end
 
   config.after(:each) do

@@ -10,7 +10,7 @@ RSpec.describe "Helpers", type: :request do
       expect {
         get "/test/increment"
       }.to change {
-        REDIS.get("tally:views@2018-09-01").to_i
+        Tally.redis { |conn| conn.get("tally:views@2018-09-01").to_i }
       }.by(1)
     end
 

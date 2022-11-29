@@ -5,12 +5,12 @@ RSpec.describe Tally do
   # reset connection
   before do
     Tally.redis_pool = nil
-    Tally.redis_connection = REDIS
+    Tally.redis_connection = nil
   end
 
   after do
     Tally.redis_pool = nil
-    Tally.redis_connection = REDIS
+    Tally.redis_connection = nil
   end
 
   describe ".redis" do
@@ -21,6 +21,9 @@ RSpec.describe Tally do
     end
 
     it "uses Redis.new by default" do
+      # this test doesn't run if sidekiq is installed
+      next if defined?(Sidekiq)
+
       Tally.redis_connection = nil
       redis_connection = instance_double("Redis")
       expect(redis_connection).to receive(:get).with("fake").and_return("ok")
@@ -33,6 +36,9 @@ RSpec.describe Tally do
     end
 
     it "uses Redis.new with provided config if set" do
+      # this test doesn't run if sidekiq is installed
+      next if defined?(Sidekiq)
+
       Tally.redis_connection = nil
 
       config = {
@@ -56,6 +62,9 @@ RSpec.describe Tally do
     end
 
     it "allows a custom redis_connection" do
+      # this test doesn't run if sidekiq is installed
+      next if defined?(Sidekiq)
+
       redis_connection = instance_double("Redis")
       expect(redis_connection).to receive(:get).and_return("ok")
 
@@ -67,7 +76,12 @@ RSpec.describe Tally do
     end
 
     it "allows a Sidekiq piggyback pool if Sidekiq is installed" do
-      sidekiq = class_double("Sidekiq").as_stubbed_const
+      sidekiq = if defined?(Sidekiq)
+        Sidekiq
+      else
+        class_double("Sidekiq").as_stubbed_const
+      end
+
       expect(sidekiq).to receive(:redis).and_return("ok")
 
       result = Tally.redis { |conn| conn.get("fake") }

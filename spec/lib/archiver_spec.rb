@@ -13,38 +13,40 @@ module Tally
     subject { Archiver.new }
 
     before do
-      REDIS.set("tally:clicks@2018-09-01", 2)
-      REDIS.set("tally:photo:#{ photo1.id }:clicks.image@2018-09-01", 48)
-      REDIS.set("tally:photo:#{ photo1.id }:clicks.title@2018-08-30", 3)
-      REDIS.set("tally:photo:#{ photo1.id }:clicks.title@2018-09-01", 32)
-      REDIS.set("tally:photo:#{ photo1.id }:clicks@2018-08-30", 2)
-      REDIS.set("tally:photo:#{ photo1.id }:clicks@2018-09-01", 89)
-      REDIS.set("tally:photo:#{ photo2.id }:clicks@2018-09-01", 120)
-      REDIS.set("tally:photo:#{ photo3.id }:clicks@2018-09-01", 78)
-      REDIS.set("tally:photo:#{ photo3.id }:views@2018-09-01", 78)
-      REDIS.set("tally:sessions@2018-08-30", 23)
-      REDIS.set("tally:sessions@2018-09-01", 20)
-      REDIS.set("tally:thing:2:views@2018-09-01", 15)
-      REDIS.set("tally:users@2018-09-01", 10)
+      Tally.redis do |conn|
+        conn.set("tally:clicks@2018-09-01", 2)
+        conn.set("tally:photo:#{ photo1.id }:clicks.image@2018-09-01", 48)
+        conn.set("tally:photo:#{ photo1.id }:clicks.title@2018-08-30", 3)
+        conn.set("tally:photo:#{ photo1.id }:clicks.title@2018-09-01", 32)
+        conn.set("tally:photo:#{ photo1.id }:clicks@2018-08-30", 2)
+        conn.set("tally:photo:#{ photo1.id }:clicks@2018-09-01", 89)
+        conn.set("tally:photo:#{ photo2.id }:clicks@2018-09-01", 120)
+        conn.set("tally:photo:#{ photo3.id }:clicks@2018-09-01", 78)
+        conn.set("tally:photo:#{ photo3.id }:views@2018-09-01", 78)
+        conn.set("tally:sessions@2018-08-30", 23)
+        conn.set("tally:sessions@2018-09-01", 20)
+        conn.set("tally:thing:2:views@2018-09-01", 15)
+        conn.set("tally:users@2018-09-01", 10)
 
-      REDIS.sadd("tally@2018-09-01", [
-        "clicks",
-        "photo:#{ photo1.id }:clicks.image",
-        "photo:#{ photo1.id }:clicks.title",
-        "photo:#{ photo1.id }:clicks",
-        "photo:#{ photo2.id }:clicks",
-        "photo:#{ photo3.id }:clicks",
-        "photo:#{ photo3.id }:views",
-        "sessions",
-        "thing:2:views",
-        "users"
-      ])
+        conn.sadd("tally@2018-09-01", [
+          "clicks",
+          "photo:#{ photo1.id }:clicks.image",
+          "photo:#{ photo1.id }:clicks.title",
+          "photo:#{ photo1.id }:clicks",
+          "photo:#{ photo2.id }:clicks",
+          "photo:#{ photo3.id }:clicks",
+          "photo:#{ photo3.id }:views",
+          "sessions",
+          "thing:2:views",
+          "users"
+        ])
 
-      REDIS.sadd("tally@2018-08-30", [
-        "photo:#{ photo1.id }:clicks.title",
-        "photo:#{ photo1.id }:clicks",
-        "sessions@2018-08-30"
-      ])
+        conn.sadd("tally@2018-08-30", [
+          "photo:#{ photo1.id }:clicks.title",
+          "photo:#{ photo1.id }:clicks",
+          "sessions@2018-08-30"
+        ])
+      end
     end
 
     describe "#archive!" do
@@ -74,7 +76,7 @@ module Tally
       end
 
       it "doesn't add records without summary set" do
-        REDIS.del("tally@2018-09-01")
+        Tally.redis { |conn| conn.del("tally@2018-09-01") }
 
         subject.archive!
 

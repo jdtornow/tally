@@ -14,16 +14,18 @@ module Tally
         expect  {
           photo.increment_tally(:views)
         }.to change {
-          REDIS.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i
+          Tally.redis { |conn| conn.get("tally:photo:#{ photo.id }:views@2018-09-01").to_i }
         }.by(1)
       end
 
       it "adds the photo to the list of stats for today" do
-        expect(REDIS.sismember("tally@2018-09-01", "photo:#{ photo.id }:views")).to eq(false)
+        is_member = Tally.redis { |conn| conn.sismember("tally@2018-09-01", "photo:#{ photo.id }:views") }
+        expect(is_member).to eq(false)
 
         photo.increment_tally(:views)
 
-        expect(REDIS.sismember("tally@2018-09-01", "photo:#{ photo.id }:views")).to eq(true)
+        is_now_member = Tally.redis { |conn| conn.sismember("tally@2018-09-01", "photo:#{ photo.id }:views") }
+        expect(is_now_member).to eq(true)
       end
     end
 
