@@ -2,7 +2,7 @@
 log/*.log
 pkg/
 spec/dummy/db/*.sqlite3
-spec/dummy/db/*.sqlite3-journal
+spec/dummy/db/*.sqlite3*
 spec/dummy/log/*.log
 spec/dummy/node_modules/
 spec/dummy/yarn-error.log
@@ -12,3 +12,4 @@ spec/dummy/coverage
 *.gem
 .yardoc/*
 doc/
+s
