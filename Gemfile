@@ -15,7 +15,7 @@ gemspec
 
 group :development, :test do
   gem "pry-rails"
-  gem "sqlite3"
+  gem "sqlite3", "~> 1.4"
   gem "annotate"
   gem "rubocop"
 
