@@ -1,20 +1,20 @@
 namespace :tally do
   desc "Sweep all outdated keys from the data store"
-  task :sweep => :environment do
-    Tally::Sweeper.sweep!
+  task sweep: :environment do
+    Tally::SweeperJob.perform_now
 
     Rake::Task["tally:wait_for_async_queue"].execute
   end
 
   desc "Archive today's temporary keys into record entries in the database"
-  task :archive => :environment do
+  task archive: :environment do
     Tally::Archiver.archive!
 
     Rake::Task["tally:wait_for_async_queue"].execute
   end
 
   desc "Archive yesterday's temporary keys into record entries in the database"
-  task "archive:yesterday" => :environment do
+  task "archive:yesterday": :environment do
     Tally::Archiver.archive! day: 1.day.ago
 
     Rake::Task["tally:wait_for_async_queue"].execute
@@ -24,7 +24,7 @@ namespace :tally do
   #
   # This is not needed for other adapters besides async, but since it is the
   # Rails default, we're accounting for it here.
-  task :wait_for_async_queue => :environment do
+  task wait_for_async_queue: :environment do
     if Rails.application.config.active_job.queue_adapter == :async
       ActiveJob::Base.queue_adapter.shutdown(wait: true)
     end
