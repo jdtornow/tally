@@ -1,6 +1,6 @@
 # Tally
 
-[![CircleCI](https://circleci.com/gh/jdtornow/tally.svg?style=svg)](https://circleci.com/gh/jdtornow/tally)
+[![Tests](https://github.com/jdtornow/tally/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/jdtornow/tally/actions/workflows/tests.yml)
 
 Tally is a simple Rails engine for capturing counts of various activities around an app. These counts are quickly captured in Redis then are archived periodically within the app's default relational database.
 
@@ -12,8 +12,8 @@ _[Read more about Tally in my blog post introducing it ...](https://johntornow.c
 
 ## Requirements
 
-* Ruby 3.0.3+
-* Rails 6.1+
+* Ruby 3.2+
+* Rails 7+
 * Redis 4+
 
 ## Installation
