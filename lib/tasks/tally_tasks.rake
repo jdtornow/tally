@@ -8,14 +8,14 @@ namespace :tally do
 
   desc "Archive today's temporary keys into record entries in the database"
   task archive: :environment do
-    Tally::Archiver.archive!
+    Tally::ArchiverJob.perform_now
 
     Rake::Task["tally:wait_for_async_queue"].execute
   end
 
   desc "Archive yesterday's temporary keys into record entries in the database"
   task "archive:yesterday": :environment do
-    Tally::Archiver.archive! day: 1.day.ago
+    Tally::ArchiverJob.perform_now("yesterday")
 
     Rake::Task["tally:wait_for_async_queue"].execute
   end
