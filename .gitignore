@@ -13,3 +13,6 @@ spec/dummy/coverage
 .yardoc/*
 doc/
 s
+
+Gemfile.lock
+.ruby-version
