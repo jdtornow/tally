@@ -1,0 +1,61 @@
+---
+name: Tests
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - "3.3"
+          - "3.2"
+          - "head"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - name: Update bundler
+        env:
+          RUBY_VERSION: ${{ matrix.ruby }}
+        run: gem update --system
+
+      - name: Bundle install
+        env:
+          RUBY_VERSION: ${{ matrix.ruby }}
+        run: bundle install
+
+      - name: Set up Appraisal
+        env:
+          RUBY_VERSION: ${{ matrix.ruby }}
+        run: |
+          bundle exec appraisal
+
+      - name: Migrate database
+        env:
+          RUBY_VERSION: ${{ matrix.ruby }}
+        run: |
+          bundle exec appraisal rails db:migrate && rails db:test:prepare
+
+      - name: Run tests
+        run: bundle exec appraisal rspec

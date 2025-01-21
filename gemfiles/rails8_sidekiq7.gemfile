@@ -2,14 +2,12 @@
 
 source "https://rubygems.org"
 
-ruby "3.2.6"
-
-gem "rails", "~> 6.1"
+gem "rails", "~> 8"
+gem "sqlite3", "~> 2.1"
+gem "sidekiq", "~> 7.3"
 
 group :development, :test do
   gem "pry-rails"
-  gem "sqlite3", "~> 1.4"
-  gem "annotate"
   gem "rubocop"
   gem "simplecov", require: false, github: "simplecov-ruby/simplecov", ref: "0f1c69af8"
   gem "rspec-rails"

@@ -10,12 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_16_183102) do
-
+ActiveRecord::Schema[8.0].define(version: 2018_10_16_183102) do
   create_table "photos", force: :cascade do |t|
     t.string "url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "tally_records", force: :cascade do |t|
@@ -24,9 +23,8 @@ ActiveRecord::Schema.define(version: 2018_10_16_183102) do
     t.string "recordable_type"
     t.string "key"
     t.integer "value", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["day", "key", "recordable_id", "recordable_type"], name: "index_tally_records_on_day", unique: true
   end
-
 end

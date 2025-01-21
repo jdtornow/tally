@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version     = ">= 3.0.3"
   s.required_rubygems_version = ">= 1.8.11"
 
-  s.add_dependency "rails", ">= 5.2.0", "< 8"
+  s.add_dependency "rails", ">= 5.2.0", "< 9"
   s.add_dependency "redis", ">= 4.1"
   s.add_dependency "connection_pool", ">= 2.0"
   s.add_dependency "kaminari-activerecord", "~> 1.1"

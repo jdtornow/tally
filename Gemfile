@@ -13,10 +13,11 @@ gemspec
 # To use a debugger
 # gem "byebug", group: [:development, :test]
 
+gem "rails", "~> 8"
+gem "sqlite3", "~> 2.1"
+
 group :development, :test do
   gem "pry-rails"
-  gem "sqlite3", "~> 1.4"
-  gem "annotate"
   gem "rubocop"
 
   # specific commit until this PR is released to allow RUby 3.1
