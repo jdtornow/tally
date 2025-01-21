@@ -2,6 +2,8 @@
 
 v2.1.0
 
+- Add `Tally::SweeperJob` in addition to existing `rails tally:sweep` rake task
+- Add `Tally::ArchiverJob` in addition to existing `rails tally:archive` rake task
 - Clean up CI usage (removes CircleCI in favor of Github Actions)
 - Dropped support for Ruby <3.1
 - Dropped support for Rails <7
